@@ -3,19 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eBay Auction Search Results</title>
+    <title>eBay Auction Finder</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input[type="datetime-local"] {
+            width: 100%;
+            padding: 8px;
+        }
+        .form-group button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
         }
         .item {
             border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 15px;
         }
         .item img {
-            max-width: 100px;
+            max-width: 100%;
             height: auto;
+            display: block;
+        }
+        .item h2 {
+            margin: 0 0 10px 0;
         }
         .item a {
             color: #007bff;
@@ -27,19 +56,39 @@
     </style>
 </head>
 <body>
-    <h1>eBay Auction Search Results</h1>
-    {% if items %}
-        {% for item in items %}
-            <div class="item">
-                <h2>{{ item.title }}</h2>
-                <p>Price: ${{ item.price }}</p>
-                <p>End Time: {{ item.end_time.strftime('%Y-%m-%d %H:%M:%S %Z') }}</p>
-                <p><a href="{{ item.url }}" target="_blank">View on eBay</a></p>
-                <p>Auction ID: {{ item.auction_id }}</p>
+    <div class="container">
+        <h1>eBay Auction Finder</h1>
+        <form method="POST">
+            <div class="form-group">
+                <label for="start_time">Start Time:</label>
+                <input type="datetime-local" id="start_time" name="start_time" required>
             </div>
-        {% endfor %}
-    {% else %}
-        <p>No items found.</p>
-    {% endif %}
+            <div class="form-group">
+                <label for="end_time">End Time:</label>
+                <input type="datetime-local" id="end_time" name="end_time" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Search</button>
+            </div>
+        </form>
+
+        {% if items %}
+            <h2>Results:</h2>
+            {% for item in items %}
+                <div class="item">
+                    <h2>{{ item.title }}</h2>
+                    <p><strong>Price:</strong> ${{ item.price }}</p>
+                    <p><strong>End Time:</strong> {{ item.end_time.isoformat() }}</p>
+                    <p><a href="{{ item.url }}" target="_blank">View Item</a></p>
+                    <p><strong>Auction ID:</strong> {{ item.auction_id }}</p>
+                    {% if item.pictureURLLarge %}
+                        <img src="{{ item.pictureURLLarge }}" alt="Item Image">
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No items found.</p>
+        {% endif %}
+    </div>
 </body>
 </html>
