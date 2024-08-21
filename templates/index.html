@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eBay Auction Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .item img {
+            max-width: 100px;
+            height: auto;
+        }
+        .item a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>eBay Auction Search Results</h1>
+    {% if items %}
+        {% for item in items %}
+            <div class="item">
+                <h2>{{ item.title }}</h2>
+                <p>Price: ${{ item.price }}</p>
+                <p>End Time: {{ item.end_time.strftime('%Y-%m-%d %H:%M:%S %Z') }}</p>
+                <p><a href="{{ item.url }}" target="_blank">View on eBay</a></p>
+                <p>Auction ID: {{ item.auction_id }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No items found.</p>
+    {% endif %}
+</body>
+</html>
