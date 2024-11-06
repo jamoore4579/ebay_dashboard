@@ -10,13 +10,9 @@ from dotenv import load_dotenv
 load_dotenv()
 API_KEY = os.getenv('API_KEY')
 
-# Initialize Flask app
 app = Flask(__name__)
 
 def search_auction_trading_cards(keywords):
-    """
-    Searches for auction-style trading cards on eBay with the specified keywords.
-    """
     try:
         api = Finding(appid=API_KEY, config_file=None)
         category_id = "213"  # Category ID for trading cards
@@ -28,7 +24,6 @@ def search_auction_trading_cards(keywords):
             ]
         })
         
-        # Set timezone for EST
         est = pytz.timezone('America/New_York')
         items = response.reply.searchResult.item
         results = []
@@ -55,7 +50,6 @@ def search_auction_trading_cards(keywords):
             }
             results.append(listing)
 
-        # Print the results to the terminal for debugging
         print("Results:", results)
 
         return results or [{"message": "No results found"}]
@@ -64,19 +58,19 @@ def search_auction_trading_cards(keywords):
         print(e)
         return [{"error": "Connection error"}]
 
-@app.route("/", methods=["GET", "POST"])
-def home():
-    """
-    Renders the search form and handles search queries.
-    """
-    print(f"Request method: {request.method}")  # Debugging line
+@app.route("/", methods=["GET"])
+def dashboard():
+    return render_template("dashboard.html")
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    print(f"Request method: {request.method}")
     if request.method == "POST":
         keywords = request.form.get("keywords")
         results = search_auction_trading_cards(keywords)
-        # Print the results before rendering the template
         print("Search Results:", results)
-        return render_template("results.html", results=results)
-    return render_template("index.html")
+        return render_template("openSearchResults.html", results=results)
+    return render_template("openSearch.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

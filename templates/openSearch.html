@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Auction Trading Cards</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/openSearch.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Search Auction Trading Cards</h1>
+        <form action="/search" method="POST">
+            <label for="keywords">Enter Keywords:</label>
+            <input type="text" id="keywords" name="keywords" required>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+</body>
+</html>
